@@ -1,0 +1,28 @@
+{
+  "name": "cordova-plugin-did-authenticator-sdk",
+  "version": "9.0.0",
+  "description": "DetectID Authenticator SDK plugin cordova for Android and iOS platforms",
+  "cordova": {
+    "id": "com.appgate.did.DetectIDCordovaPlugin",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android",
+    "didauthenticator",
+    "did",
+    "appgate",
+    "Android",
+    "iOS",
+    "cordova"
+  ],
+  "author": "appgate, Inc.",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "scripts": {
+  }
+}

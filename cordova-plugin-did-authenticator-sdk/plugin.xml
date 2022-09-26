@@ -1,0 +1,370 @@
+<!--Disclaimer
+MIT License
+
+Copyright (c) 2021 Appgate Cybersecurity, Inc. 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.-->
+
+<?xml version='1.0' encoding='utf-8'?>
+<plugin xmlns:android="http://schemas.android.com/apk/res/android"
+        id="com.appgate.did.DetectIDCordovaPlugin" version="9.0.0"
+        xmlns="http://apache.org/cordova/ns/plugins/1.0">
+
+    <!--required setup-->
+    <name>DetectIDAuthenticator</name>
+    <description>DetectID Authenticator SDK plugin cordova for Android, iOS platforms</description>
+    <license>Apache 2.0</license>
+    <keywords>didauthenticator,did,appgate,Appgate, Android,iOS, cordova</keywords>
+    <author>appgate, Inc.</author>
+
+    <!--supported versions-->
+    <engines>
+        <engine name="cordova" version=">=9.0.0"/>
+    </engines>
+
+    <!--js modules and plugin id-->
+
+    <js-module name="DetectIDCordovaPlugin" src="www/DIDAuthenticatorSDK.js">
+        <clobbers target="DetectIDCordovaPlugin"/>
+    </js-module>
+
+    <!-- <dependency id="cordova-plugin-firebase" url="https://github.com/arnesson/cordova-plugin-firebase/" commit="db3b661fc7fe23694794c9d4e8f9f10c8eb7d649" subdir="/" /> -->
+    <!-- iOS platform-->
+    <platform name="ios">
+        <!-- ios-specific elements -->
+        <config-file parent="/*" target="config.xml">
+            <feature name="DetectIDCordovaPlugin">
+                <param name="ios-package" onload="true" value="DetectIDCordovaPlugin"/>
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+
+        <config-file parent="/*" target="config.xml">
+            <feature name="DIDPlugPushApi">
+                <param name="ios-package" onload="true" value="DIDPlugPushApi"/>
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+
+        <config-file parent="/*" target="config.xml">
+            <feature name="DIDPlugRegistrationApi">
+                <param name="ios-package" onload="true" value="DIDPlugRegistrationApi"/>
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+
+        <config-file parent="/*" target="config.xml">
+            <feature name="DIDPlugQRAuthenticationApi">
+                <param name="ios-package" onload="true" value="DIDPlugQRAuthenticationApi"/>
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+
+        <config-file parent="/*" target="config.xml">
+            <feature name="DIDPlugAccountsApi">
+                <param name="ios-package" onload="true" value="DIDPlugAccountsApi"/>
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+
+        <config-file parent="/*" target="config.xml">
+            <feature name="DIDPlugOtpApi">
+                <param name="ios-package" onload="true" value="DIDPlugOtpApi"/>
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+
+        <!-- ios-specific permissions -->
+        <config-file parent="NSCameraUsageDescription" target="*-Info.plist">
+            <string>We are using a camera to QR</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="UIBackgroundModes">
+            <array>
+                <string>remote-notification</string>
+            </array>
+        </config-file>
+        <config-file parent="NSMicrophoneUsageDescription" target="*-Info.plist">
+            <string>We are using a Microphone to Voice</string>
+        </config-file>
+        <config-file parent="NSAppTransportSecurity" target="*-Info.plist">
+            <dict>
+                <key>NSAllowsArbitraryLoads</key>
+                <true/>
+            </dict>
+        </config-file>
+        <!-- ios-specific setup -->
+        <config-file parent="CFBundleURLTypes" target="*-Info.plist">
+            <array>
+                <dict>
+                    <key>CFBundleURLSchemes</key>
+                    <array>
+                        <string>did</string>
+                        <string>prefs</string>
+                    </array>
+                    <key>CFBundleTypeRole</key>
+                    <string>Editor</string>
+                    <key>CFBundleURLName</key>
+                    <string>$PACKAGE_NAME</string>
+                </dict>
+            </array>
+        </config-file>
+
+        <!-- ios-specific files -->
+        <header-file src="src/ios/DetectIDCordovaPlugin.h"/>
+        <source-file src="src/ios/DetectIDCordovaPlugin.m"/>
+
+        <!-- ios registrations files -->
+        <header-file src="src/ios/registration/DIDPlugRegistrationApi.h"/>
+        <source-file src="src/ios/registration/DIDPlugRegistrationApi.m"/>
+
+        <!-- ios authentication files -->
+        <header-file src="src/ios/qr/DIDPlugQRAuthenticationApi.h"/>
+        <source-file src="src/ios/qr/DIDPlugQRAuthenticationApi.m"/>
+
+        <!-- ios account files -->
+        <header-file src="src/ios/account/DIDPlugAccountsApi.h"/>
+        <source-file src="src/ios/account/DIDPlugAccountsApi.m"/>
+
+        <!-- ios otp files -->
+        <header-file src="src/ios/otp/DIDPlugOtpApi.h"/>
+        <source-file src="src/ios/otp/DIDPlugOtpApi.m"/>
+
+        <!-- ios push files -->
+        <header-file src="src/ios/push/AppDelegate+notification.h"/>
+        <source-file src="src/ios/push/AppDelegate+notification.m"/>
+        <header-file src="src/ios/push/DIDPlugPushApi.h"/>
+        <source-file src="src/ios/push/DIDPlugPushApi.m"/>
+        <header-file src="src/ios/push/DIDPlugPushTransactionManager.h"/>
+        <source-file src="src/ios/push/DIDPlugPushTransactionManager.m"/>
+        <header-file src="src/ios/push/DIDPlugPushAlertManager.h"/>
+        <source-file src="src/ios/push/DIDPlugPushAlertManager.m"/>
+        <header-file src="src/ios/push/DIDPluginTransactionServerResponseListener.h"/>
+        <source-file src="src/ios/push/DIDPluginTransactionServerResponseListener.m"/>
+        <header-file src="src/ios/push/DIDPluginPushAlertOpenListener.h"/>
+        <source-file src="src/ios/push/DIDPluginPushAlertOpenListener.m"/>
+        <header-file src="src/ios/push/DIDPluginTransactionOpenListener.h"/>
+        <source-file src="src/ios/push/DIDPluginTransactionOpenListener.m"/>
+        <header-file src="src/ios/push/DIDPluginTransactionActionListener.h"/>
+        <source-file src="src/ios/push/DIDPluginTransactionActionListener.m"/>
+
+        <!-- ios helper files -->
+        <header-file src="src/ios/helper/DIDPlugConstantsHelper.h"/>
+        <header-file src="src/ios/helper/DIDPlugHelper.h"/>
+        <source-file src="src/ios/helper/DIDPlugHelper.m"/>
+        <header-file src="src/ios/helper/DIDPlugServerHelper.h"/>
+        <source-file src="src/ios/helper/DIDPlugServerHelper.m"/>
+        <header-file src="src/ios/helper/DIDPlugExceptionsHelper.h"/>
+        <source-file src="src/ios/helper/DIDPlugExceptionsHelper.m"/>
+        <header-file src="src/ios/helper/DIDPlugRegexHelper.h"/>
+        <source-file src="src/ios/helper/DIDPlugRegexHelper.m"/>
+
+        <!-- ios-specific frameworks -->
+        <framework custom="true" embed="true" src="libs/ios/appgate_core.xcframework"/>
+        <framework custom="true" embed="true" src="libs/ios/appgate_sdk.xcframework"/>
+        <framework custom="true" embed="true" src="libs/iOS/didm_core.xcframework"/>
+        <framework custom="true" embed="true" src="libs/ios/didm_sdk.xcframework"/>
+
+        <framework src="Security.framework"/>
+        <framework src="SystemConfiguration.framework"/>
+        <framework src="LocalAuthentication.framework"/>
+        <framework src="Security.framework"/>
+        <framework src="AVFoundation.framework"/>
+        <framework src="CoreVideo.framework"/>
+        <framework src="CoreMedia.framework"/>
+        <framework src="libiconv.dylib"/>
+        <framework src="QuartzCore.framework"/>
+        <framework src="UIKit.framework"/>
+        <framework src="Foundation.framework"/>
+        <framework src="CoreGraphics.framework"/>
+    </platform>
+
+    <!-- Android platform-->
+    <platform name="android">
+
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="DetectIDCordovaPlugin">
+                <param name="android-package"
+                       value="com.appgate.did.DetectIDCordovaPlugin.DetectIDCordovaPlugin"/>
+
+            </feature>
+            <feature name="DIDPlugPushApi">
+                <param name="android-package"
+                       value="com.appgate.did.DetectIDCordovaPlugin.push.DIDPlugPushApi"/>
+
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="DIDPlugRegistrationApi">
+                <param name="android-package"
+                       value="com.appgate.did.DetectIDCordovaPlugin.registration.DIDPlugRegistrationApi"/>
+
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="DIDPlugAccountsApi">
+                <param name="android-package"
+                       value="com.appgate.did.DetectIDCordovaPlugin.accounts.DIDPlugAccountsApi"/>
+
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="DIDPlugOtpApi">
+                <param name="android-package"
+                       value="com.appgate.did.DetectIDCordovaPlugin.otp.DIDPlugOtpApi"/>
+
+            </feature>
+        </config-file>
+
+        <!-- Android Manifest  -->
+        <config-file target="AndroidManifest.xml"  parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET"/>
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+            <uses-permission android:name="android.permission.WAKE_LOCK"/>
+            <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+            <!-- QR Code Permissions -->
+            <uses-permission android:name="android.permission.CAMERA"/>
+            <!-- Push Permissions -->
+            <uses-permission android:name="android.permission.VIBRATE"/>
+            <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
+            <!-- TouchID Permission -->
+            <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+
+            <uses-feature android:name="android.hardware.camera2.full"/>
+
+        </config-file>
+
+        <!-- Manifest file -->
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <!-- QR Authentication-->
+            <activity
+                    android:name="com.appgate.didm_auth.qr.transaction.QRCodeTransactionActivity"
+                    android:exported="false"
+                    android:theme="@android:style/Theme.Dialog"/>
+            <!-- Push Authentication -->
+            <activity
+                    android:name="com.appgate.didm_auth.push_auth.transaction.PushTransactionActivity"
+                    android:exported="false"
+                    android:launchMode="singleInstance"
+                    android:theme="@android:style/Theme.Dialog"/>
+            <activity
+                    android:name="com.appgate.didm_auth.push_auth.alert.PushAlertActivity"
+                    android:exported="false"
+                    android:launchMode="singleInstance"
+                    android:theme="@android:style/Theme.Dialog"/>
+
+
+            <!-- Push quick actions broadcast-->
+            <receiver
+                    android:name="com.appgate.didm_auth.push_auth.transaction.broadcast.ConfirmPushTransactionBroadcast"/>
+            <receiver
+                    android:name="com.appgate.didm_auth.push_auth.transaction.broadcast.DeclinePushTransactionBroadcast"/>
+
+            <!-- Face Authentication-->
+            <activity
+                    android:name="com.appgate.didm_auth.face_auth.registration.FaceRegistrationActivity"
+                    android:configChanges="orientation|keyboardHidden"
+                    android:exported="false"
+                    android:screenOrientation="portrait"
+                    android:theme="@android:style/Theme.Dialog"/>
+            <activity
+                    android:name="com.appgate.didm_auth.face_auth.transaction.FaceAuthenticationActivity"
+                    android:configChanges="orientation|keyboardHidden"
+                    android:exported="false"
+                    android:screenOrientation="portrait"
+                    android:theme="@android:style/Theme.Dialog"/>
+            <!-- Push services -->
+            <service
+                    android:name="com.appgate.did.DetectIDCordovaPlugin.push.DIDFirebaseMessagingService"
+                    android:exported="false">
+                <intent-filter>
+                    <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                </intent-filter>
+            </service>
+        </config-file>
+
+        <!-- DID Plugin API -->
+        <source-file src="src/android/MainApplication.java"
+                     target-dir="src/com/appGate/DetectID/Wrapper/Cordova/app"/>
+
+        <source-file src="src/android/proguard-rules.pro"
+                     target-dir="../../"/>
+        <source-file src="src/android/DIDServerURL.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin"/>
+        <source-file src="src/android/DetectIDCordovaPlugin.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin"/>
+
+        <source-file src="src/android/registration/DIDPlugRegistrationManager.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/registration"/>
+        <source-file src="src/android/registration/DIDPlugRegistrationApi.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/registration"/>
+
+        <source-file src="src/android/accounts/DIDPlugAccountsManager.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/accounts"/>
+        <source-file src="src/android/accounts/DIDPlugAccountsApi.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/accounts"/>
+
+        <source-file src="src/android/otp/DIDPlugOtpManager.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/otp"/>
+        <source-file src="src/android/otp/DIDPlugOtpApi.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/otp"/>
+        <source-file src="src/android/otp/DIDPlugChallengeOtpManager.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/otp"/>
+
+
+        <!--DID Push API-->
+        <source-file src="src/android/push/DIDPlugPushApi.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/push"/>
+        <source-file src="src/android/push/DIDPlugPushTransactionManager.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/push"/>
+        <source-file src="src/android/push/DIDPlugPushAlertManager.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/push"/>
+        <source-file src="src/android/push/DIDFirebaseMessagingService.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/push"/>
+        <!-- Listeners -->
+        <source-file src="src/android/listeners/DIDPluginPushAlertOpenListener.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/listeners"/>
+        <source-file src="src/android/listeners/DIDPluginPushAlertReceiveListener.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/listeners"/>
+
+        <source-file src="src/android/listeners/DIDPluginTransactionOpenListener.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/listeners"/>
+        <source-file src="src/android/listeners/DIDPluginTransactionReceiveListener.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/listeners"/>
+        <source-file src="src/android/listeners/DIDPluginTransactionServerResponseListener.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/listeners"/>
+
+        <source-file src="src/android/listeners/DIDPluginOnClientArgumentsErrors.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/listeners"/>
+        <source-file src="src/android/listeners/DIDPluginOnServerParametersErrors.java"
+                     target-dir="src/com/appgate/did/DetectIDCordovaPlugin/listeners"/>
+
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:usesCleartextTraffic="true"/>
+        </edit-config>
+
+        <custom-preference name="android-manifest/application/@android:name"
+                           value="com.appgate.did.DetectIDCordovaPlugin.DIDApplication"/>
+
+        <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference"/>
+
+        <lib-file src="libs/android/didm_sdk-9.0.0.aar"/>
+        <lib-file src="libs/android/appgate_sdk-2.0.0.aar"/>
+
+    </platform>
+</plugin>
