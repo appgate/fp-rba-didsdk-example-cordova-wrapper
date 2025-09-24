@@ -15,45 +15,19 @@
     }
     return self;
 }
-      
-- (void)didInit:(CDVInvokedUrlCommand*)command {
-    [self didInitManager: command];
-}
 
 - (void)didRegistration:(CDVInvokedUrlCommand*)command {
     [self.commandDelegate runInBackground: ^{
         [self didRegistrationManager: command];
     }];
 }
-    
+
 - (void)didRegistrationByQRCode:(CDVInvokedUrlCommand*)command {
     [self didRegistrationByQRCodeManager: command];
 }
     
 - (void)setRegistrationViewProperties:(CDVInvokedUrlCommand*)command {
     [self setRegistrationViewPropertiesManager:command];
-}
-    
-- (void)didInitManager:(CDVInvokedUrlCommand*)command {
-    __block DIDPlugRegistrationApi* pluginBlock = self;
-    
-    @try {
-        __block CDVPluginResult *pluginResult;
-        __block CDVInvokedUrlCommand *commandBlock = command;
-        [self validateInputParams: [NSDictionary class] withSize: 0 withCommand: command completion: ^(NSException *exception) {
-            if (exception) {
-                @throw exception;
-            } else {
-                [[DetectID sdk] didInit];
-                
-                pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsBool: TRUE];
-                [pluginBlock.commandDelegate sendPluginResult: pluginResult callbackId: commandBlock.callbackId];
-                NSLog(SUCCESS_PROCESS);
-            }
-        }];
-    } @catch (NSException *e) {
-        [self handleException:e withBlock:pluginBlock andCommand:command];
-    }
 }
 
 - (void)didRegistrationManager:(CDVInvokedUrlCommand *)command {
@@ -88,7 +62,7 @@
         [self handleException:e withBlock:pluginBlock andCommand:command];
     }
 }
-    
+
 - (void)didRegistrationByQRCodeManager:(CDVInvokedUrlCommand*)command {
     __block DIDPlugRegistrationApi *pluginBlock = self;
     @try {
@@ -115,7 +89,6 @@
         [self handleException:e withBlock:pluginBlock andCommand:command];
     }
 }
-    
 
 - (CDVPluginResult*)onRegistrationResponseManager:(NSString *)result withCommand:(CDVInvokedUrlCommand *)commandDeviceRegistrationServerResponseListener {
     CDVPluginResult *pluginResult = nil;
@@ -130,7 +103,7 @@
     
     return pluginResult;
 }
-    
+
 - (void)setRegistrationViewPropertiesManager:(CDVInvokedUrlCommand*)command {
     __block DIDPlugRegistrationApi* pluginBlock = self;
     @try {
@@ -159,8 +132,7 @@
         [pluginBlock.commandDelegate sendPluginResult:pluginResultFail callbackId:command.callbackId];
     }
 }
-    
-    
+
 - (void)validateInputParams:(Class) aClass withSize:(NSUInteger) size withCommand:(CDVInvokedUrlCommand*)command completion:(void (^)(NSException *exception)) completion {
     if (command.arguments) {
         if ([command.arguments count] == size) {

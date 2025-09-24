@@ -1,7 +1,6 @@
 package com.appgate.did.DetectIDCordovaPlugin.otp;
 
 import android.content.Context;
-;
 import com.appgate.didm_auth.DetectID;
 import com.appgate.didm_auth.common.account.entities.Account;
 import com.appgate.didm_auth.otp_auth.ocra.OtpToken;

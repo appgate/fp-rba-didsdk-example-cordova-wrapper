@@ -11,21 +11,9 @@
     return [super init];
 }
 
--(void)setPushAlertViewProperties: (CDVInvokedUrlCommand*)command withPlugin:(DIDPlugPushApi*) pluginPushApi{
-    __block CDVPluginResult* pluginResult;
-    __block CDVInvokedUrlCommand* commandProperties = command;
-
-    PushAlertViewProperties *pushAlertVP = [self convertJsonToPushAlertViewProperties: [commandProperties.arguments objectAtIndex:0]];
-        
-    [[[DetectID sdk] getPushApi] setPushAlertViewProperties: pushAlertVP];
-    
-    pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsBool: TRUE];
-    [pluginPushApi.commandDelegate sendPluginResult: pluginResult callbackId:commandProperties.callbackId];
-}
-
 - (void)approvePushAlertAction: (CDVInvokedUrlCommand*)command withPlugin:(DIDPlugPushApi*) pluginPushApi{
-    
-    [[[DetectID sdk] getPushApi] approvePushAlertAction:[DIDPlugHelper convertJsonToPushTransactionInfo:[command.arguments objectAtIndex:0]]];
+    TransactionInfo *transaction = [DIDPlugHelper convertJsonToPushTransactionInfo:[command.arguments objectAtIndex:0]];
+    [[[DetectID sdk] getPushApi] approvePushAlertAction:transaction];
 }
 
 -(PushAlertViewProperties*)convertJsonToPushAlertViewProperties:(NSDictionary*)json{

@@ -61,8 +61,11 @@ static char launchNotificationKey;
 
 // app background
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler {
-    [[DetectID sdk] handleActionWithIdentifier:response];
-    completionHandler();
+    [[DetectID sdk] handleActionWithIdentifier:response onSuccess:^{
+        completionHandler();
+    } onFailure:^(AGSDKError * _Nonnull error) {
+        completionHandler();
+    }];
 }
 
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)(void))completionHandler {

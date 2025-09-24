@@ -27,9 +27,6 @@
 var exec = require('cordova/exec');
 
 var DetectIDCordovaPlugin = {
-    didInit: function (success, fail) {
-        exec(success, fail, "DIDPlugRegistrationApi", "didInit", []);
-    },
     didRegistration: function (success, fail, url) {
         exec(success, fail, "DIDPlugRegistrationApi", "didRegistration", [{"url": url}]);
     },
@@ -38,9 +35,6 @@ var DetectIDCordovaPlugin = {
     },
     setPushTransactionViewProperties: function (success, fail, pushTransactionViewProperties) {
         exec(success, fail, "DIDPlugPushApi", "setPushTransactionViewProperties", ["" + JSON.stringify(pushTransactionViewProperties)]);
-    },
-    setPushQuickActionServerResponseListener: function (success, fail) {
-        exec(success, fail, "DIDPlugPushApi", "setPushTransactionServerResponseListener", []);
     },
     setPushTransactionReceiveListener: function (success, fail) {
         exec(success, fail, "DIDPlugPushApi", "setPushTransactionReceiveListener", []);
@@ -117,7 +111,12 @@ var DetectIDCordovaPlugin = {
     onDeclineQRCodeTransaction: function (success, fail, transaction) {
         exec(success, fail, "DIDPlugQRAuthenticationApi", "declineQRCodeTransaction", [transaction]);
     },
-
+    setupTransactionInbox: function ({urlPushAlert, urlPushAuth}) {
+        exec(null, null, "DIDPlugInboxApi", "setupTransactionInbox", [urlPushAlert, urlPushAuth, ""]);
+    },
+    getAllTransactionsByType: function ({account, type, status, page}, success, fail) {
+       exec(success, fail, "DIDPlugInboxApi", "getAllTransactionsByType", [account, type, status, page]);
+    },
 };
 
 module.exports = DetectIDCordovaPlugin;

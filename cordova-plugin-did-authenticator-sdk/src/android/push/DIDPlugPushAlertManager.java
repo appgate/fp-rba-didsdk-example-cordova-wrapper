@@ -14,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 public class DIDPlugPushAlertManager {
 
     private static final String NOTIFICATION_ICON_RESOURCE = "NOTIFICATION_ICON_RESOURCE";
@@ -51,7 +50,6 @@ public class DIDPlugPushAlertManager {
     public static void approvePushAlert(Context myContext, JSONArray args, CallbackContext callbackContext) throws JSONException {
         TransactionInfo transactionInfo = new Gson().fromJson(args.getString(0), TransactionInfo.class);
         DetectID.sdk(myContext).getPushApi().approvePushAlertAction(transactionInfo);
+        callbackContext.success();
     }
-
-
 }

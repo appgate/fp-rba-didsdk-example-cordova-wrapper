@@ -11,8 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 
-
-
 public class DetectIDCordovaPlugin extends CordovaPlugin {
 
     @Override

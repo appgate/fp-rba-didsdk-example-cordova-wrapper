@@ -1,6 +1,7 @@
 #import "DIDPlugPushApi.h"
 #import "DIDPlugConstantsHelper.h"
 #import "DIDPlugPushTransactionManager.h"
+#import "DIDPlugExceptionsHelper.h"
 #import "DIDPlugHelper.h"
 
 @implementation DIDPlugPushTransactionManager{
@@ -10,29 +11,53 @@
     return [super init];
 }
 
--(void)setPushTransactionViewProperties: (CDVInvokedUrlCommand*)command withPlugin:(DIDPlugPushApi*) pluginPushApi{
-    
-    __block CDVInvokedUrlCommand* commandProperties = command;
-    
-    NSError *jsonError;
-    NSData *objectData = [[commandProperties.arguments objectAtIndex:0] dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData options:NSJSONReadingMutableContainers error:&jsonError];
-    
-    [[[DetectID sdk] getPushApi] setPushTransactionViewProperties:[DIDPlugHelper convertJsonToPushTransactionViewProperties:json]];
+- (void)confirmPushTransactionAction: (CDVInvokedUrlCommand*)command withPlugin:(DIDPlugPushApi*) pluginPushApi {
+    __block DIDPlugPushApi* pluginBlock = pluginPushApi;
+
+    @try {
+        __block CDVPluginResult *pluginResult;
+        __block CDVInvokedUrlCommand *commandBlock = command;
+        
+        TransactionInfo *transaction = [DIDPlugHelper convertJsonToPushTransactionInfo:[command.arguments objectAtIndex:0]];
+        [[[DetectID sdk] getPushApi] confirmPushTransactionAction:transaction onSuccess:^{
+            pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsBool: TRUE];
+            [pluginBlock.commandDelegate sendPluginResult:pluginResult callbackId:commandBlock.callbackId];
+        } onFailure:^(AGSDKError * _Nonnull error) {
+            CDVPluginResult *pluginResultFail = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:FALSE];
+            [pluginBlock.commandDelegate sendPluginResult:pluginResultFail callbackId:command.callbackId];
+        }];
+    }
+    @catch (NSException *e)
+    {
+        CDVPluginResult *pluginResultFail = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[DIDPlugExceptionsHelper pluginExceptionHandler:e]];
+        [pluginBlock.commandDelegate sendPluginResult:pluginResultFail callbackId:command.callbackId];
+    }
 }
 
-- (void)confirmPushTransactionAction: (CDVInvokedUrlCommand*)command withPlugin:(DIDPlugPushApi*) pluginPushApi{
+- (void)declinePushTransactionAction: (CDVInvokedUrlCommand*)command withPlugin:(DIDPlugPushApi*) pluginPushApi {
+    __block DIDPlugPushApi* pluginBlock = pluginPushApi;
     
-    [[[DetectID sdk] getPushApi] confirmPushTransactionAction : [DIDPlugHelper convertJsonToPushTransactionInfo:[command.arguments objectAtIndex:0]]];
+    @try {
+        __block CDVPluginResult *pluginResult;
+        __block CDVInvokedUrlCommand *commandBlock = command;
+        
+        TransactionInfo *transaction = [DIDPlugHelper convertJsonToPushTransactionInfo:[command.arguments objectAtIndex:0]];
+        [[[DetectID sdk] getPushApi] declinePushTransactionAction:transaction onSuccess:^{
+            pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsBool: TRUE];
+            [pluginBlock.commandDelegate sendPluginResult:pluginResult callbackId:commandBlock.callbackId];
+        } onFailure:^(AGSDKError * _Nonnull error) {
+            CDVPluginResult *pluginResultFail = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:FALSE];
+            [pluginBlock.commandDelegate sendPluginResult:pluginResultFail callbackId:command.callbackId];
+        }];
+    }
+    @catch (NSException *e)
+    {
+        CDVPluginResult *pluginResultFail = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[DIDPlugExceptionsHelper pluginExceptionHandler:e]];
+        [pluginBlock.commandDelegate sendPluginResult:pluginResultFail callbackId:command.callbackId];
+    }
 }
 
-- (void)declinePushTransactionAction: (CDVInvokedUrlCommand*)command withPlugin:(DIDPlugPushApi*) pluginPushApi{
-    
-    [[[DetectID sdk] getPushApi] declinePushTransactionAction: [DIDPlugHelper convertJsonToPushTransactionInfo:[command.arguments objectAtIndex:0]]];
-}
-
-- (void)setPushAuthenticationResponseAdditionalInfo: (CDVInvokedUrlCommand*)command withPlugin:(DIDPlugPushApi*) pluginPushApi{
-    
+- (void)setPushAuthenticationResponseAdditionalInfo: (CDVInvokedUrlCommand*)command withPlugin:(DIDPlugPushApi*) pluginPushApi {
     [[[DetectID sdk] getPushApi] setPushAuthenticationResponseAdditionalInfo:[command.arguments objectAtIndex:0]];
 }
 

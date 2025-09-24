@@ -48,7 +48,6 @@
 #define ACTIVE_PUSH_AUTH @"activePushAuth"
 #define ACTIVE_QR_AUTH @"activeQRAuth"
 #define ACTIVE_PUSH_ALERT @"activePushAlert"
-#define ACTIVE_VOICE_AUTH @"activeVoiceAuth"
 #define ACTIVE_FACE_AUTH @"activeFaceAuth"
 
 #define ACTIVATION_URL @"activationURL"

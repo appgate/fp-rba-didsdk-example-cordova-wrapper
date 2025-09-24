@@ -3,7 +3,6 @@
 
 @interface DIDPlugPushAlertManager : NSObject
 
-- (void)setPushAlertViewProperties: (CDVInvokedUrlCommand*)command withPlugin:(DIDPlugPushApi*) pluginPushApi;
-
 - (void)approvePushAlertAction: (CDVInvokedUrlCommand*)command withPlugin:(DIDPlugPushApi*) pluginPushApi;
+
 @end

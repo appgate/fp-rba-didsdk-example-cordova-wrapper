@@ -24,13 +24,6 @@ public class DIDPlugRegistrationManager {
 
     }
 
-    public static void didInit(Context context, CallbackContext callbackContext) throws JSONException {
-        DetectID.sdk(context).didInit();
-        DetectID.sdk(context).PUSH_API.enablePushAlertDefaultDialog(false);
-        DetectID.sdk(context).PUSH_API.enablePushTransactionDefaultDialog(false);
-        callbackContext.success();
-    }
-
     public static void setDeviceRegistrationByCode(Context myContext, JSONArray args, CallbackContext callbackContext) throws JSONException {
         JSONObject jsonDevicerRegistrationByCode = args.getJSONObject(0);
         String url = jsonDevicerRegistrationByCode.getString(URL);
@@ -38,8 +31,7 @@ public class DIDPlugRegistrationManager {
             DetectID.sdk(myContext).didRegistration(url, new EnrollmentResultHandler() {
                 @Override
                 public void onSuccess() {
-                    PluginResult result = new PluginResult(PluginResult.Status.OK, OK);
-                    // result.setKeepCallback(true);
+                    PluginResult result = new PluginResult(PluginResult.Status.OK, OK);                
                     callbackContext.sendPluginResult(result);
                 }
 

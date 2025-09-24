@@ -1,4 +1,5 @@
 #import "DIDPluginTransactionOpenListener.h"
+#import "TransactionsCache.h"
 #import "DIDPlugHelper.h"
 
 
@@ -31,6 +32,7 @@
 }
 
 - (void)onPushTransactionOpen:(TransactionInfo *)transaction {
+    [[TransactionsCache sharedInstance] setTransactions: @[transaction]];
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary: [DIDPlugHelper convertTransactionInfoToDictionary:transaction] ];
     [pluginResult setKeepCallbackAsBool:YES];
     [pushPlugin.commandDelegate sendPluginResult:pluginResult callbackId:commandPluginTransactionOpenListener.callbackId];
