@@ -4,11 +4,6 @@
 
 @interface DetectIDCordovaPlugin : CDVPlugin
 
-// Executes all queued events
-#pragma - mark - Common Api
-
-- (void)didInit:(CDVInvokedUrlCommand*)command;
-
 - (void)didRegistration:(CDVInvokedUrlCommand*)command;
 
 - (void)didRegistrationByQRCode:(CDVInvokedUrlCommand*)command;

@@ -10,8 +10,6 @@
 @property (nonatomic, retain) CDVInvokedUrlCommand *currentCommand;
 @property (nonatomic, strong) NSString* myCallbackId;
 
-- (void)didInit:(CDVInvokedUrlCommand*)command;
-
 - (void)didRegistration:(CDVInvokedUrlCommand*)command;
 
 - (void)didRegistrationByQRCode:(CDVInvokedUrlCommand*)command;

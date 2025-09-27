@@ -13,9 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 public class DIDPlugPushApi extends CordovaPlugin {
-    private Context myContext;
     private final String TAG = "DetectIDCordovaPlugin";
-    private final String SET_PUSH_TRANSACTION_SERVER_RESPONSE_LISTENER = "setPushTransactionServerResponseListener";
     private final String SET_PUSH_TRANSACTION_RECEIVE_LISTENER = "setPushTransactionReceiveListener";
     private final String SET_PUSH_TRANSACTION_OPEN_LISTENER = "setPushTransactionOpenListener";
     private final String CONFIRM_PUSH_TRANSACTION_ACTION = "confirmPushTransactionAction";
@@ -26,6 +24,7 @@ public class DIDPlugPushApi extends CordovaPlugin {
     private final String SET_PUSH_AUTHENTICATION_RESPONSE_ADDITIONAL_INFO = "setPushAuthenticationResponseAdditionalInfo";
     private final String SET_TRANSACTION_VIEW_PROPERTIES = "setPushTransactionViewProperties";
     private final String SET_ALERT_VIEW_PROPERTIES = "setPushAlertViewProperties";
+    private Context myContext;
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -40,9 +39,6 @@ public class DIDPlugPushApi extends CordovaPlugin {
 
             if (action.equals(SET_TRANSACTION_VIEW_PROPERTIES)) {
                 DIDPlugPushTransactionManager.setPushTransactionViewProperties(myContext, args, callbackContext);
-            }
-            if (action.equals(SET_PUSH_TRANSACTION_SERVER_RESPONSE_LISTENER)) {
-                DIDPlugPushTransactionManager.setPushTransactionServerResponseListener(myContext, args, callbackContext);
             }
             if (action.equals(SET_PUSH_TRANSACTION_RECEIVE_LISTENER)) {
                 DIDPlugPushTransactionManager.setPushTransactionReceiveListener(myContext, args, callbackContext);

@@ -1,5 +1,6 @@
-#import "DIDPlugConstantsHelper.h"
 #import "DIDPlugHelper.h"
+#import "DIDPlugConstantsHelper.h"
+#import "TransactionsCache.h"
 
 @implementation DIDPlugHelper
 
@@ -29,23 +30,8 @@
     return pushTransactionVP;
 }
 
-+ (TransactionInfo*)convertJsonToPushTransactionInfo:(NSDictionary*)json{
-    TransactionInfo* transaction = [[TransactionInfo alloc]init];
-    
-    transaction.transactionID = [json valueForKeyPath: TRANSACTION_ID] ? : nil;
-    transaction.subject = [json valueForKeyPath: SUBJECT] ? : nil;
-    transaction.message = [json valueForKeyPath: MESSAGE_PROPERTIES] ? : nil;
-    transaction.urlToResponse = [json valueForKeyPath: URL_TO_RESPONSE] ? : nil;
-    transaction.urlToConfigFaceID = [json valueForKeyPath: URL_TO_CONFIG_FACEID] ? : nil;
-    transaction.timeStamp =  [([json valueForKeyPath: TIME_STAMP] ? : nil) longLongValue];
-    transaction.transactionOfflineCode = [json valueForKeyPath: TRANSACTION_OFFLINE_CODE] ? : nil;
-    transaction.account = [self convertJsonToAccount:[json valueForKeyPath: ACCOUNT_PROPERTIES] ? : nil];
-    transaction.gestures = [self convertJsonToGestures:[json valueForKeyPath: GESTURES_PROPERTIES] ? : nil];
-    transaction.channel = [self convertJsonToChannel:[json valueForKeyPath: CHANNEL_PROPERTIES] ? : nil];
-    transaction.type = [([json valueForKeyPath: TYPE] ? : nil) integerValue];
-    transaction.biometricType = [([json valueForKeyPath: BIOMETRIC_TYPE] ? : nil) integerValue];
-    transaction.status = [([json valueForKeyPath: STATUS] ? : nil) integerValue];
-    
++ (TransactionInfo*)convertJsonToPushTransactionInfo:(NSDictionary*)json {
+    TransactionInfo *transaction = [[TransactionsCache sharedInstance] getTransactionInfo:json];
     return transaction;
 }
 
@@ -59,8 +45,6 @@
         TIME_STAMP: [self fixString: [NSString stringWithFormat:@"%ld", transaction.timeStamp]],
         TRANSACTION_OFFLINE_CODE: [self fixString: transaction.transactionOfflineCode],
         ACCOUNT_PROPERTIES: [self convertAccountToJson:transaction.account],
-//        GESTURES_PROPERTIES: transaction.gestures,
-//        CHANNEL_PROPERTIES: transaction.channel,
         TYPE: [self fixString: [NSString stringWithFormat:@"%ld", transaction.type]],
         BIOMETRIC_TYPE: [self fixString: [NSString stringWithFormat:@"%ld", transaction.biometricType]],
         STATUS: [self fixString: [NSString stringWithFormat:@"%ld", transaction.status]]
@@ -72,12 +56,11 @@
 }
 
 + (Account*)convertJsonToAccount:(NSDictionary*)json{
-
     for (Account *account in [[DetectID sdk] getAccounts]) {
-           if ([account.organizationName isEqual: [json valueForKeyPath: ORGANIZATION_NAME]] && [account.registrationDate isEqual: [json valueForKeyPath: REGISTRATION_DATE]])
-               return account;
-       }
-       return nil;
+        if ([account.organizationName isEqual: [json valueForKeyPath: ORGANIZATION_NAME]] && [account.registrationDate isEqual: [json valueForKeyPath: REGISTRATION_DATE]])
+        return account;
+    }
+    return nil;
 }
 
 + (NSDictionary *)convertAccountToJson:(Account *)account {
@@ -89,25 +72,10 @@
              ACTIVE_PUSH_AUTH : [NSNumber numberWithBool: account.activePushAuth],
              ACTIVE_QR_AUTH : [NSNumber numberWithBool:account.activeQRAuth],
              ACTIVE_PUSH_ALERT : [NSNumber numberWithBool:account.activePushAlert],
-             ACTIVE_VOICE_AUTH : [NSNumber numberWithBool:account.activeVoiceAuth],
              ACTIVE_OTP_AUTH : [NSNumber numberWithBool:account.activeOTPAuth],
              ACTIVE_FACE_AUTH : [NSNumber numberWithBool:account.activeFaceAuth],
              REGISTRATION_METHOD : [NSNumber numberWithInt:account.registrationMethod]
              };
-}
-
-+ (Gestures*)convertJsonToGestures:(NSDictionary*)json{
-    Gestures* gestures = [[Gestures alloc]init];
-    gestures.faceGestures = [json valueForKeyPath: FACE_GESTURES] ? : nil;
-    
-    return gestures;
-}
-
-+ (Channel*)convertJsonToChannel:(NSDictionary*)json{
-    Channel* channel = [[Channel alloc]init];
-    channel.channelName = [json valueForKeyPath: CHANNEL_NAME] ? : nil;
-    
-    return channel;
 }
 
 + (NSDictionary *)convertTransactionInfoToDictionary:(TransactionInfo*) transactionInfo{
@@ -149,7 +117,26 @@
     
     free(properties);
     
-    return [NSDictionary dictionaryWithDictionary:dict];
+    return [NSDictionary dictionaryWithDictionary:[self sanitizeForJSON:dict]];
+}
+
++ (id)sanitizeForJSON:(id)object {
+    if ([object isKindOfClass:[NSDictionary class]]) {
+        NSMutableDictionary *sanitized = [NSMutableDictionary dictionary];
+        for (id key in object) {
+            sanitized[key] = [self sanitizeForJSON:object[key]];
+        }
+        return sanitized;
+    } else if ([object isKindOfClass:[NSArray class]]) {
+        NSMutableArray *sanitized = [NSMutableArray array];
+        for (id item in object) {
+            [sanitized addObject:[self sanitizeForJSON:item]];
+        }
+        return sanitized;
+    } else if ([object isKindOfClass:[NSDate class]]) {
+        return @([(NSDate*)object timeIntervalSince1970] * 1000);
+    }
+    return object;
 }
 
 + (NSString *)convertObjectToString:(id)obj {

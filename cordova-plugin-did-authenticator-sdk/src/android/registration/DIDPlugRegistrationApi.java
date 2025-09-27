@@ -15,8 +15,6 @@ import org.json.JSONException;
 public class DIDPlugRegistrationApi extends CordovaPlugin {
 
     private final String TAG = "DetectIDCordovaPlugin";
-    private Context myContext;
-    private final String didInit = "didInit";
     private final String DEVICE_REGISTRATION_BY_URL = "didRegistration";
     private final String DEVICE_REGISTRATION_BY_QR = "didRegistrationByQRCode";
 
@@ -28,17 +26,14 @@ public class DIDPlugRegistrationApi extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
         try {
-            myContext = cordova.getActivity().getApplicationContext();
+            Context myContext = cordova.getActivity().getApplicationContext();
             DetectID.sdk(myContext);
 
-            if (action.equals(didInit)) {
-                DIDPlugRegistrationManager.didInit(myContext, callbackContext);
-            }
             if (action.equals(DEVICE_REGISTRATION_BY_URL)) {
                 DIDPlugRegistrationManager.setDeviceRegistrationByCode(myContext, args, callbackContext);
             }
             if (action.equals(DEVICE_REGISTRATION_BY_QR)) {
-                DIDPlugRegistrationManager.setDeviceRegistrationByQrCode(myContext, args,callbackContext);
+                DIDPlugRegistrationManager.setDeviceRegistrationByQrCode(myContext, args, callbackContext);
             }
 
             return true;

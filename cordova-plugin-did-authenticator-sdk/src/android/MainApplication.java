@@ -8,7 +8,7 @@ import com.appgate.did.DetectIDCordovaPlugin.listeners.DIDPluginPushAlertOpenLis
 import com.appgate.did.DetectIDCordovaPlugin.listeners.DIDPluginTransactionOpenListener;
 import com.appgate.didm_auth.DetectID;
 import com.appgate.didm_auth.libs.DIDAppLifeCycleHandler;
-import com.appgate.demos.democordovadid.MainActivity;
+import com.appgate.authenticator.MainActivity;
 
 public class MainApplication extends MultiDexApplication {
 

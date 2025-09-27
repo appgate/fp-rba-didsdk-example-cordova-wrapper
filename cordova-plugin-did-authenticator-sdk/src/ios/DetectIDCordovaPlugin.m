@@ -42,12 +42,6 @@
     [eventQueue removeAllObjects];
 }
 
-- (void)didInit:(CDVInvokedUrlCommand *)command{
-    __block CDVInvokedUrlCommand *commandBlock = command;
-    pluginManager = [DIDPlugRegistrationApi new];
-    [pluginManager didInit: commandBlock];
-}
-
 - (void)deviceRegistrationByCode:(CDVInvokedUrlCommand*)command{
     __block CDVInvokedUrlCommand *commandBlock = command;
     [self.commandDelegate runInBackground:^{
